@@ -5,5 +5,14 @@ Self-contained tests which spin up 2 Bitcoin nodes in Docker containers using [T
 
 Just run 
 ```bash
-./gradlew clean test
+./gradlew clean test allureReport
 ```
+
+### Reporting
+[Allure](http://allure.qatools.ru/) report by default is generated at `build/reports/allure-report`
+
+
+### What was left out due to limited time:
+* better BDD support - add Cucumber-JVM or Spock, and therefor better reporting with detailed test steps
+* testing negative cases (e.g. sending bitcoins when there are any)
+* verifying status codes, error response - with current implementation it's not possible. Need to rewrite code to more low level, add HTTP interceptor. However, current implementation is much simpler and easier to use
