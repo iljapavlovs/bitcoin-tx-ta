@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 public class BitcoinTransactionTest {
 
-  protected static BitcoinClient nodeClientA;
+  private static BitcoinClient nodeClientA;
+  private static BitcoinClient nodeClientB;
 
   @BeforeAll
   public static void setup() throws MalformedURLException {
@@ -18,13 +19,31 @@ public class BitcoinTransactionTest {
         "secretpassword1",
         "127.0.0.1",
         "18443");
+
+    nodeClientB = new BitcoinClientFactory().createClient(
+        "nodeB",
+        "secretpassword2",
+        "127.0.0.1",
+        "28443");
   }
 
   @Test
   public void verifyTransaction() {
 
+    // GIVEN
+    final var addressA = nodeClientA.getNewAddress();
+    nodeClientA.generateToAddress(101, addressA);
+    final var addressB = nodeClientB.getNewAddress();
+
+    // WHEN
+    nodeClientA.sendToAddress(addressB, new BigDecimal("39.99999991"));
+    nodeClientA.generateToAddress(1, addressA);
+
+    // THEN
     final BigDecimal balanceA = nodeClientA.getBalance();
-    assertThat(balanceA).isEqualTo(new BigDecimal(0));
+    final BigDecimal balanceB = nodeClientB.getBalance();
+    assertThat(balanceA).isEqualTo("59.99997189");
+    assertThat(balanceB).isEqualTo("39.99999991");
   }
 
 }
