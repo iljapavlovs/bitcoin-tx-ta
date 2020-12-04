@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  nodeA:
+    image: ruimarinho/bitcoin-core
+    command: -regtest=1 -rpcuser=nodeA -rpcpassword=secretpassword1 -rpcport=18443 -port=18444 -printtoconsole -rpcallowip=0.0.0.0/0 -rpcbind=0.0.0.0 -connect=nodeB:28444 -listen=1 -server -fallbackfee=0.0002
+    ports:
+      - "18443:18443"
+      - "18444:18444"
+
+  nodeB:
+    image: ruimarinho/bitcoin-core
+    command: -regtest=1 -rpcuser=nodeB -rpcpassword=secretpassword2 -rpcport=28443 -port=28444 -printtoconsole -rpcallowip=0.0.0.0/0 -rpcbind=0.0.0.0 -connect=nodeA:18444 -listen=1 -server -fallbackfee=0.0002
+    ports:
+      - "28443:28443"
+      - "28444:28444"

@@ -16,4 +16,7 @@ public interface BitcoinClient {
 
   @JsonRpcMethod("sendtoaddress")
   String sendToAddress(String address, BigDecimal amount);
+
+  @JsonRpcMethod("getconnectioncount")
+  int getConnectionCount();
 }
